@@ -41,6 +41,38 @@ public class ContactManager {
         return getContacts();
     }
 
+    /**
+     * get all the phone number from phonebook
+     * @return @{@link List<String>} of the phone numbers
+     */
+    public List<String> fetchPhoneNumbers(){
+        List<String> phoneNumberList = new ArrayList<>();
+
+        String[] projection = new String[]{
+                ContactsContract.Contacts._ID,
+                ContactsContract.Contacts.HAS_PHONE_NUMBER
+        };
+        Cursor cursorContact = context
+                .getContentResolver()
+                .query(ContactsContract.Contacts.CONTENT_URI, projection, null, null,
+                        ContactsContract.Contacts.DISPLAY_NAME + " ASC");
+
+        if (cursorContact != null && cursorContact.moveToFirst()) {
+            while (!cursorContact.isAfterLast()) {
+                String id = cursorContact.getString(
+                        cursorContact.getColumnIndex(ContactsContract.Contacts._ID));
+                if (cursorContact.getInt(cursorContact.getColumnIndex(
+                        ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+                    phoneNumberList.addAll(getPhoneNumber(id));
+                }
+                cursorContact.moveToNext();
+            }
+            cursorContact.close();
+        }
+
+        return phoneNumberList;
+    }
+
     private List<Contact> getContacts() {
 
         List<Contact> contactList = new ArrayList<>();

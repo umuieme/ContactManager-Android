@@ -8,6 +8,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.aabumu.contactmanager.ContactManager;
+
+import org.w3c.dom.Text;
+
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                ContactManager contactManager = new ContactManager(getBaseContext());
+                ((TextView) findViewById(R.id.text)).setText(Arrays.toString(contactManager.fetchPhoneNumbers().toArray()));
             }
         });
     }
